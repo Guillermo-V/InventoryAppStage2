@@ -22,7 +22,6 @@ import java.util.function.Supplier;
 
 public class CatalogActivity extends AppCompatActivity {
 
-    /** Database helper that will provide us access to the database */
     private InventoryDbHelper mDbHelper;
 
     @Override
@@ -30,7 +29,6 @@ public class CatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,8 +38,7 @@ public class CatalogActivity extends AppCompatActivity {
             }
         });
 
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
+
         mDbHelper = new InventoryDbHelper(this);
     }
 
@@ -51,15 +48,9 @@ public class CatalogActivity extends AppCompatActivity {
         displayDatabaseInfo();
     }
 
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the inventory database.
-     */
     private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        String [] projection = {
+        String[] projection = {
                 InventoryEntry._ID,
                 InventoryEntry.COLUMN_Inventory_NAME,
                 InventoryEntry.COLUMN_Inventory_Price,
@@ -68,24 +59,24 @@ public class CatalogActivity extends AppCompatActivity {
                 InventoryEntry.COLUMN_SUPPLIER_NPHONE_NUMBER,
         };
 
-        Cursor cursor = db.query(
-                InventoryEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        );
+        Cursor cursor = getContentResolver().query( InventoryEntry.CONTENT_URI ,projection, null,null,null);
+
+        /** Cursor cursor = db.query(
+                  InventoryEntry.TABLE_NAME,
+                  projection,
+                  null,
+                  null,
+                  null,
+                  null,
+                  null
+          );**/
 
 
         try {
 
-            // Display the number of rows in the Cursor (which reflects the number of rows in the
-            // inventory table in the database).
+
             TextView displayView = (TextView) findViewById(R.id.text_view_inventory);
             displayView.setText("Number of rows in inventory database table: " + cursor.getCount());
-
 
             int idColumnIndex = cursor.getColumnIndex(InventoryEntry._ID);
             int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_NAME);
@@ -94,8 +85,7 @@ public class CatalogActivity extends AppCompatActivity {
             int supplierNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NAME);
             int supplierPhoneNumberColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NPHONE_NUMBER);
 
-
-            while(cursor.moveToNext()){
+            while (cursor.moveToNext()) {
 
                 int currentID = cursor.getInt(idColumnIndex);
                 String currentName = cursor.getString(nameColumnIndex);
@@ -103,11 +93,8 @@ public class CatalogActivity extends AppCompatActivity {
                 String currentQuantity = cursor.getString(quantityColumnIndex);
                 String currentSupplierName = cursor.getString(supplierNameColumnIndex);
                 String currentSupplierNamPhoneNumber = cursor.getString(supplierPhoneNumberColumnIndex);
-
-
-
-                displayView.append ("\n" + currentID + " - "
-                        + currentName + " - " + currentPrice+ " - " +currentQuantity + " - " + currentSupplierName + " - " + currentSupplierNamPhoneNumber);
+                displayView.append("\n" + currentID + " - "
+                        + currentName + " - " + currentPrice + " - " + currentQuantity + " - " + currentSupplierName + " - " + currentSupplierNamPhoneNumber);
 
             }
 
@@ -116,7 +103,6 @@ public class CatalogActivity extends AppCompatActivity {
             cursor.close();
         }
     }
-
 
     private void insertInventory() {
 

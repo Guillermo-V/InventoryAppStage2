@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.inventoryapp.data.InventoryDbHelper;
 
@@ -24,9 +25,6 @@ public class EditorActivity extends AppCompatActivity {
     private EditText mSupplierNameEditText;
 
     private EditText mSupplierPhoneNumberEditText;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +44,8 @@ public class EditorActivity extends AppCompatActivity {
         String priceString = mPriceEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         int quantity = Integer.parseInt(quantityString);
-        String supplierName = mSupplierNameEditText.toString().trim();
-        String supplierPhoneNumber = mSupplierPhoneNumberEditText.toString().trim();
+        String supplierName = mSupplierNameEditText.getText().toString().trim();
+        String supplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
 
         InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
 
@@ -59,7 +57,6 @@ public class EditorActivity extends AppCompatActivity {
         values.put(InventoryEntry.COLUMN_Inventory_Quantity, quantity);
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, supplierName);
         values.put(InventoryEntry.COLUMN_SUPPLIER_NPHONE_NUMBER, supplierPhoneNumber);
-
 
 
         long newRowId = db.insert(InventoryEntry.TABLE_NAME, null, values);
