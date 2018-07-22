@@ -401,7 +401,6 @@ public class EditorActivity extends AppCompatActivity implements
 
     public void increaseCount(int productID, int productQuantity) {
         productQuantity = productQuantity + 1;
-        InventoryProvider inventoryProvider = new InventoryProvider();
         if (productQuantity >= 0) {
             updateInventory(productQuantity);
             Toast.makeText(this, "quantity change", Toast.LENGTH_SHORT).show();
@@ -434,7 +433,7 @@ public class EditorActivity extends AppCompatActivity implements
                 Toast.makeText(this, "update failed",
                         Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "insert succesful",
+                Toast.makeText(this, "insert succesfull",
                         Toast.LENGTH_SHORT).show();
             }
         }
