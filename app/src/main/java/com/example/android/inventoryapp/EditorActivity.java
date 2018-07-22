@@ -3,6 +3,7 @@ package com.example.android.inventoryapp;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -15,12 +16,14 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 import com.example.android.inventoryapp.data.InventoryContract;
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.inventoryapp.data.InventoryDbHelper;
+import com.example.android.inventoryapp.data.InventoryProvider;
 
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -317,23 +321,57 @@ public class EditorActivity extends AppCompatActivity implements
 
 
         if (cursor.moveToFirst()) {
+            final int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
             int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_Inventory_NAME);
             int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_Price);
             int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_Quantity);
             int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NAME);
             int supplierPhoneNumberColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NPHONE_NUMBER);
 
-
             String name = cursor.getString(nameColumnIndex);
             String price = cursor.getString(priceColumnIndex);
-            int quantity = cursor.getInt(quantityColumnIndex);
-            String supplierName = cursor.getString(supplierColumnIndex);
-            String supplierPhoneNumber = cursor.getString(supplierPhoneNumberColumnIndex);
+            final int quantity = cursor.getInt(quantityColumnIndex);
+             String supplierName = cursor.getString(supplierColumnIndex);
+            final String supplierPhoneNumber = cursor.getString(supplierPhoneNumberColumnIndex);
             mNameEditText.setText(name);
             mPriceEditText.setText(price);
             mQuantityEditText.setText(Integer.toString(quantity));
             mSupplierNameEditText.setText(supplierName);
             mSupplierPhoneNumberEditText.setText(supplierPhoneNumber);
+
+            Button productDecreaseButton = (Button) findViewById(R.id.decrease);
+            productDecreaseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    decreaseCount(idColumnIndex, quantity);
+                }
+            });
+
+            Button productIncreaseButton = (Button) findViewById(R.id.increase);
+            productIncreaseButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    increaseCount(idColumnIndex, quantity);
+                }
+            });
+
+            Button productDeleteButton = (Button) findViewById(R.id.delete);
+            productDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDeleteConfirmationDialog();
+                }
+            });
+
+            Button phoneButton = (Button) findViewById(R.id.phone);
+            phoneButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String phone = supplierPhoneNumber;
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    startActivity(intent);
+                }
+            });
 
         }
     }
@@ -348,6 +386,65 @@ public class EditorActivity extends AppCompatActivity implements
         mSupplierNameEditText.setText("");
         mSupplierPhoneNumberEditText.setText("");
     }
+
+    public void decreaseCount(int productID, int productQuantity) {
+        productQuantity = productQuantity - 1;
+        if (productQuantity >= 0) {
+            updateInventory(productQuantity);
+            Toast.makeText(this, "quantity change", Toast.LENGTH_SHORT).show();
+
+            Log.d("Log msg", " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");
+        } else {
+            Toast.makeText(this, "quantity change", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void increaseCount(int productID, int productQuantity) {
+        productQuantity = productQuantity + 1;
+        InventoryProvider inventoryProvider = new InventoryProvider();
+        if (productQuantity >= 0) {
+            updateInventory(productQuantity);
+            Toast.makeText(this, "quantity change", Toast.LENGTH_SHORT).show();
+
+            Log.d("Log msg", " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount method.");
+        }
+    }
+
+    private void updateInventory(int productQuantity) {
+        Log.d("message", "updateProduct at ViewActivity");
+
+        if (mCurrentInventoryUri == null) {
+            return;
+        }
+        ContentValues values = new ContentValues();
+        values.put(InventoryEntry.COLUMN_Inventory_Quantity, productQuantity);
+
+        if (mCurrentInventoryUri == null) {
+            Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
+            if (newUri == null) {
+                Toast.makeText(this, "insert failed",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "inserted properly",
+                        Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            int rowsAffected = getContentResolver().update(mCurrentInventoryUri, values, null, null);
+            if (rowsAffected == 0) {
+                Toast.makeText(this, "update failed",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "insert succesful",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+
+
+
+
 }
 
 

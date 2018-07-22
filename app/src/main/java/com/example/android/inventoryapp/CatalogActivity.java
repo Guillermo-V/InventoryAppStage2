@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.InventoryContract;
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
@@ -56,9 +57,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
                 Intent intent = new Intent(CatalogActivity.this,EditorActivity.class);
 
-                Uri currentPetUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI,id);
+                Uri currentInventoryUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI,id);
 
-                intent.setData(currentPetUri);
+                intent.setData(currentInventoryUri);
 
                 startActivity(intent);
             }
@@ -130,5 +131,20 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     public void onLoaderReset(Loader<Cursor> loader) {
         mCursorAdapter.swapCursor(null);
 
+    }
+
+    public void productSaleCount(int productID, int productQuantity) {
+        productQuantity = productQuantity - 1;
+        if (productQuantity >= 0) {
+            ContentValues values = new ContentValues();
+            values.put(InventoryEntry.COLUMN_Inventory_Quantity, productQuantity);
+            Uri updateUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, productID);
+            int rowsAffected = getContentResolver().update(updateUri, values, null, null);
+            Toast.makeText(this, "Quantity changed", Toast.LENGTH_SHORT).show();
+
+            Log.d("Log msg", "rowsAffected " + rowsAffected + " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");
+        } else {
+            Toast.makeText(this, "We do not have this product on stock", Toast.LENGTH_SHORT).show();
+        }
     }
 }
