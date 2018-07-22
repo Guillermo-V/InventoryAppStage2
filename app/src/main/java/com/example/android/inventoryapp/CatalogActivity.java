@@ -110,7 +110,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         String [] projection = {InventoryEntry._ID,
                 InventoryEntry.COLUMN_Inventory_NAME,
-                InventoryEntry.COLUMN_Inventory_Price};
+                InventoryEntry.COLUMN_Inventory_Price,
+                InventoryEntry.COLUMN_Inventory_Quantity};
 
         return new CursorLoader(this, InventoryEntry.CONTENT_URI,
                 projection,

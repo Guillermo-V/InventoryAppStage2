@@ -31,12 +31,16 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
+        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
+
+
 
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_NAME);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_Price);
-
+        int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_Quantity);
         String InventoryName = cursor.getString(nameColumnIndex);
         String InventoryPrice = cursor.getString(priceColumnIndex);
+        String InventoryQuantity = cursor.getString(quantityColumnIndex);
 
         if (TextUtils.isEmpty(InventoryPrice)) {
 
@@ -45,5 +49,6 @@ public class InventoryCursorAdapter extends CursorAdapter {
         }
         nameTextView.setText(InventoryName);
         summaryTextView.setText(InventoryPrice);
+        quantityTextView.setText(InventoryQuantity);
     }
 }
