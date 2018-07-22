@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <string name="unknown_price">Unknown price</string>
+    <string name="editor_delete_inventory_successful">inventory deleted</string>
+    <string name="editor_delete_inventory_failed">Error with deleting inventory</string>
+    <string name="delete_dialog_msg">Delete this inventory?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
+
+    <string name="editor_update_inventory_failed">Error with updating inventory</string>
+
+    <string name="editor_insert_inventory_successful">Inventory saved</string>
+
+    <string name="editor_insert_inventory_failed">Error with saving inventory</string>
+
     <string name="app_name">inventory</string>
 
     <string name="action_insert_dummy_data">Insert Dummy Data</string>
@@ -15,7 +31,6 @@
 
     <string name="category_overview">Overview</string>
 
-
     <string name="category_order">order</string>
 
     <string name="hint_inventory_name">Android device</string>
@@ -23,7 +38,6 @@
     <string name="hint_inventory_price">300</string>
 
     <string name="hint_inventory_quantity">1</string>
-
 
     <string name="supplier_name">Supplier</string>
 
@@ -37,6 +51,12 @@
 
     <string name="usd">USD</string>
 
+    <string name="empty_view_title_text">There is nothing here</string>
+
+    <string name="empty_view_subtitle_text">Lets add something!</string>
+
+    <string name="editor_activity_title_edit_inventory">add something to the inventory</string>
+
+    <string name="editor_update_inventory_successful">Inventory updated</string>
 
 </resources>
-
