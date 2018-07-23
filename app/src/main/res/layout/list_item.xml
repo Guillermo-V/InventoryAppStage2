@@ -19,14 +19,16 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:textAppearance="?android:textAppearanceMedium"
+        android:text="name"
         android:textColor="#2B3D4D"  />
 
     <TextView
-        android:id="@+id/summary"
+        android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
+        android:text="price"
         android:textColor="#AEB6BD"  />
 
     <TextView
@@ -35,26 +37,14 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="#AEB6BD" />
+        android:textColor="#AEB6BD"
+        android:text="quantity"/>
         >
 
 
     </LinearLayout>
 
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        >
-
-        <Button
-            android:id="@+id/sale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="sale" />
-
-    </RelativeLayout>
 
 
 </LinearLayout>

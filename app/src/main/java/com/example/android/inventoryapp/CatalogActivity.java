@@ -1,5 +1,7 @@
 package com.example.android.inventoryapp;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -17,7 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.InventoryContract;
@@ -28,7 +32,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     private static final int INVENTORY_LOADER = 0;
     InventoryCursorAdapter mCursorAdapter;
 
-
+    Uri currentInventoryUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +42,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                Intent intent = new Intent(CatalogActivity.this, NewActivity.class);
                 startActivity(intent);
             }
         });
@@ -57,7 +61,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
                 Intent intent = new Intent(CatalogActivity.this,EditorActivity.class);
 
-                Uri currentInventoryUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI,id);
+               currentInventoryUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI,id);
 
                 intent.setData(currentInventoryUri);
 
@@ -84,7 +88,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     private void deleteAll() {
                 int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryEntry.CONTENT_URI, null, null);
-                Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
+                Log.v("CatalogActivity", rowsDeleted + " rows deleted from inventory database");
             }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,18 +137,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     }
 
-    public void productSaleCount(int productID, int productQuantity) {
-        productQuantity = productQuantity - 1;
-        if (productQuantity >= 0) {
-            ContentValues values = new ContentValues();
-            values.put(InventoryEntry.COLUMN_Inventory_Quantity, productQuantity);
-            Uri updateUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, productID);
-            int rowsAffected = getContentResolver().update(updateUri, values, null, null);
-            Toast.makeText(this, "Quantity changed", Toast.LENGTH_SHORT).show();
 
-            Log.d("Log msg", "rowsAffected " + rowsAffected + " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");
-        } else {
-            Toast.makeText(this, "We do not have this product on stock", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 }

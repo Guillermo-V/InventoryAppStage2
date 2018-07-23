@@ -33,7 +33,7 @@ import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.android.inventoryapp.data.InventoryDbHelper;
 import com.example.android.inventoryapp.data.InventoryProvider;
 
-public class EditorActivity extends AppCompatActivity implements
+public class NewActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int EXISTING_Inventory_LOADER = 0;
@@ -66,7 +66,7 @@ public class EditorActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor);
+        setContentView(R.layout.new_item);
         Intent intent = getIntent();
         mCurrentInventoryUri = intent.getData();
         if (mCurrentInventoryUri == null) {
@@ -78,11 +78,11 @@ public class EditorActivity extends AppCompatActivity implements
             getLoaderManager().initLoader(EXISTING_Inventory_LOADER, null, this);
         }
 
-        mNameEditText = (EditText) findViewById(R.id.edit_inventory_name);
-        mPriceEditText = (EditText) findViewById(R.id.edit_inventory_price);
-        mQuantityEditText = (EditText) findViewById(R.id.edit_inventory_quantity);
-        mSupplierNameEditText = (EditText) findViewById(R.id.edit_inventory_supplier_name);
-        mSupplierPhoneNumberEditText = (EditText) findViewById(R.id.edit_inventory_supplier_phone_number);
+        mNameEditText = (EditText) findViewById(R.id.new_inventory_name);
+        mPriceEditText = (EditText) findViewById(R.id.new_inventory_price);
+        mQuantityEditText = (EditText) findViewById(R.id.new_inventory_quantity);
+        mSupplierNameEditText = (EditText) findViewById(R.id.new_inventory_supplier_name);
+        mSupplierPhoneNumberEditText = (EditText) findViewById(R.id.new_inventory_supplier_phone_number);
 
         mNameEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
@@ -190,7 +190,7 @@ public class EditorActivity extends AppCompatActivity implements
             case android.R.id.home:
 
                 if (!mInventoryHasChanged) {
-                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    NavUtils.navigateUpFromSameTask(NewActivity.this);
                     return true;
                 }
 
@@ -200,7 +200,7 @@ public class EditorActivity extends AppCompatActivity implements
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // User clicked "Discard" button, navigate to parent activity.
-                                NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                                NavUtils.navigateUpFromSameTask(NewActivity.this);
                             }
                         };
 
@@ -253,49 +253,6 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
 
-    private void showDeleteConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.delete_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-
-
-            public void onClick(DialogInterface dialog, int id) {
-                deleteInventory();
-            }
-
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-
-
-            public void onClick(DialogInterface dialog, int id) {
-
-
-                if (dialog != null) {
-
-                    dialog.dismiss();
-                }
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void deleteInventory() {
-        if (mCurrentInventoryUri != null) {
-
-            int rowsDeleted = getContentResolver().delete(mCurrentInventoryUri, null, null);
-
-            if (rowsDeleted == 0) {
-                Toast.makeText(this, getString(R.string.editor_delete_inventory_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, getString(R.string.editor_delete_inventory_successful),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-        finish();
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
@@ -331,7 +288,7 @@ public class EditorActivity extends AppCompatActivity implements
             String name = cursor.getString(nameColumnIndex);
             String price = cursor.getString(priceColumnIndex);
             final int quantity = cursor.getInt(quantityColumnIndex);
-             String supplierName = cursor.getString(supplierColumnIndex);
+            String supplierName = cursor.getString(supplierColumnIndex);
             final String supplierPhoneNumber = cursor.getString(supplierPhoneNumberColumnIndex);
             mNameEditText.setText(name);
             mPriceEditText.setText(price);
@@ -339,39 +296,7 @@ public class EditorActivity extends AppCompatActivity implements
             mSupplierNameEditText.setText(supplierName);
             mSupplierPhoneNumberEditText.setText(supplierPhoneNumber);
 
-            Button inventoryDecreaseButton = (Button) findViewById(R.id.decrease);
-            inventoryDecreaseButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    decreaseCount(idColumnIndex, quantity);
-                }
-            });
 
-            Button inventoryIncreaseButton = (Button) findViewById(R.id.increase);
-            inventoryIncreaseButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    increaseCount(idColumnIndex, quantity);
-                }
-            });
-
-            Button inventoryDeleteButton = (Button) findViewById(R.id.delete);
-            inventoryDeleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDeleteConfirmationDialog();
-                }
-            });
-
-            Button phoneButton = (Button) findViewById(R.id.phone);
-            phoneButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String phone = String.valueOf(supplierPhoneNumber);
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                    startActivity(intent);
-                }
-            });
 
         }
     }
@@ -389,61 +314,48 @@ public class EditorActivity extends AppCompatActivity implements
 
 
 
-    private void updateInventory(int productQuantity) {
-        Log.d("message", "updateProduct at ViewActivity");
 
-        if (mCurrentInventoryUri == null) {
-            return;
-        }
-        ContentValues values = new ContentValues();
-        values.put(InventoryEntry.COLUMN_Inventory_Quantity, productQuantity);
 
-        if (mCurrentInventoryUri == null) {
-            Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
-            if (newUri == null) {
-                Toast.makeText(this, "insert failed",
+    private void deleteInventory() {
+        if (mCurrentInventoryUri != null) {
+
+            int rowsDeleted = getContentResolver().delete(mCurrentInventoryUri, null, null);
+
+            if (rowsDeleted == 0) {
+                Toast.makeText(this, getString(R.string.editor_delete_inventory_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "inserted properly",
-                        Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            int rowsAffected = getContentResolver().update(mCurrentInventoryUri, values, null, null);
-            if (rowsAffected == 0) {
-                Toast.makeText(this, "update failed",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "insert succesfull",
+                Toast.makeText(this, getString(R.string.editor_delete_inventory_successful),
                         Toast.LENGTH_SHORT).show();
             }
         }
+        finish();
     }
 
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 
-    public void decreaseCount(int inventoryID, int inventoryQuantity) {
-        inventoryQuantity = inventoryQuantity - 1;
-        if (inventoryQuantity >= 0) {
-            updateInventory(inventoryQuantity);
-            Toast.makeText(this, "quantity changed", Toast.LENGTH_SHORT).show();
 
-            Log.d("Log msg", " - InventoryID " + inventoryID + " - quantity " + inventoryQuantity + " , decreaseCount has been called.");
-        } else {
-            Toast.makeText(this, "We do not have this product on stock", Toast.LENGTH_SHORT).show();
-        }
+            public void onClick(DialogInterface dialog, int id) {
+                deleteInventory();
+            }
+
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+
+            public void onClick(DialogInterface dialog, int id) {
+
+
+                if (dialog != null) {
+
+                    dialog.dismiss();
+                }
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
-
-    public void increaseCount(int InventoryID, int InventoryQuantity) {
-        InventoryQuantity = InventoryQuantity + 1;
-        if (InventoryQuantity >= 0) {
-            updateInventory(InventoryQuantity);
-            Toast.makeText(this, "quantity changed", Toast.LENGTH_SHORT).show();
-
-            Log.d("Log msg", " - productID " + InventoryID + " - quantity " + InventoryQuantity + " , decreaseCount has been called.");
-        }
-    }
-
-
-
 }
-
-
