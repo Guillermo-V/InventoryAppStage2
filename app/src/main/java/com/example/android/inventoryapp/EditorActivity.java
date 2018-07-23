@@ -70,7 +70,7 @@ public class EditorActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         mCurrentInventoryUri = intent.getData();
         if (mCurrentInventoryUri == null) {
-            setTitle("Add something to the inventory");
+            setTitle("Edit");
             invalidateOptionsMenu();
 
         } else {
@@ -111,6 +111,13 @@ public class EditorActivity extends AppCompatActivity implements
         String supplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
 
         if (mCurrentInventoryUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhoneNumber)) {
+            Toast.makeText(this, "Error updating a product.Please type something in every field",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mCurrentInventoryUri == null | TextUtils.isEmpty(nameString) | TextUtils.isEmpty(priceString) | TextUtils.isEmpty(quantityString) | TextUtils.isEmpty(supplierName) | TextUtils.isEmpty(supplierPhoneNumber)) {
+            Toast.makeText(this, "Error updating a product.Please type something in every field",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -118,11 +125,6 @@ public class EditorActivity extends AppCompatActivity implements
         if (!TextUtils.isEmpty(quantityString)) {
             quantity = Integer.parseInt(quantityString);
         }
-
-
-        InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
-
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_Inventory_NAME, nameString);
@@ -194,12 +196,10 @@ public class EditorActivity extends AppCompatActivity implements
                     return true;
                 }
 
-
                 DialogInterface.OnClickListener discardButtonClickListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // User clicked "Discard" button, navigate to parent activity.
                                 NavUtils.navigateUpFromSameTask(EditorActivity.this);
                             }
                         };
@@ -331,7 +331,7 @@ public class EditorActivity extends AppCompatActivity implements
             String name = cursor.getString(nameColumnIndex);
             String price = cursor.getString(priceColumnIndex);
             final int quantity = cursor.getInt(quantityColumnIndex);
-             String supplierName = cursor.getString(supplierColumnIndex);
+            String supplierName = cursor.getString(supplierColumnIndex);
             final String supplierPhoneNumber = cursor.getString(supplierPhoneNumberColumnIndex);
             mNameEditText.setText(name);
             mPriceEditText.setText(price);
@@ -376,7 +376,6 @@ public class EditorActivity extends AppCompatActivity implements
         }
     }
 
-
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
@@ -386,8 +385,6 @@ public class EditorActivity extends AppCompatActivity implements
         mSupplierNameEditText.setText("");
         mSupplierPhoneNumberEditText.setText("");
     }
-
-
 
     private void updateInventory(int productQuantity) {
         Log.d("message", "updateProduct at ViewActivity");
@@ -441,7 +438,6 @@ public class EditorActivity extends AppCompatActivity implements
             Log.d("Log msg", " - productID " + InventoryID + " - quantity " + InventoryQuantity + " , decreaseCount has been called.");
         }
     }
-
 
 
 }

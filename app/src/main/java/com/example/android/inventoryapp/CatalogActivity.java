@@ -27,12 +27,13 @@ import android.widget.Toast;
 import com.example.android.inventoryapp.data.InventoryContract;
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 
-public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks <Cursor>{
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int INVENTORY_LOADER = 0;
     InventoryCursorAdapter mCursorAdapter;
 
     Uri currentInventoryUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         View emptyView = findViewById(R.id.empty_view);
         inventoryListView.setEmptyView(emptyView);
 
-        mCursorAdapter = new InventoryCursorAdapter(this,null);
+        mCursorAdapter = new InventoryCursorAdapter(this, null);
 
         inventoryListView.setAdapter(mCursorAdapter);
 
@@ -59,9 +60,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(CatalogActivity.this,EditorActivity.class);
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
 
-               currentInventoryUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI,id);
+                currentInventoryUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
 
                 intent.setData(currentInventoryUri);
 
@@ -69,7 +70,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             }
         });
 
-        getLoaderManager().initLoader(INVENTORY_LOADER,null,this);
+        getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
 
     }
 
@@ -87,9 +88,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     private void deleteAll() {
-                int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryEntry.CONTENT_URI, null, null);
-                Log.v("CatalogActivity", rowsDeleted + " rows deleted from inventory database");
-            }
+        int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryEntry.CONTENT_URI, null, null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from inventory database");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -113,7 +115,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
-        String [] projection = {InventoryEntry._ID,
+        String[] projection = {InventoryEntry._ID,
                 InventoryEntry.COLUMN_Inventory_NAME,
                 InventoryEntry.COLUMN_Inventory_Price,
                 InventoryEntry.COLUMN_Inventory_Quantity};
@@ -136,7 +138,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         mCursorAdapter.swapCursor(null);
 
     }
-
 
 
 }

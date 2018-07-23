@@ -55,8 +55,6 @@
 
     <string name="empty_view_subtitle_text">Lets add something!</string>
 
-    <string name="editor_activity_title_edit_inventory">add something to the inventory</string>
-
     <string name="editor_update_inventory_successful">Inventory updated</string>
 
 </resources>
