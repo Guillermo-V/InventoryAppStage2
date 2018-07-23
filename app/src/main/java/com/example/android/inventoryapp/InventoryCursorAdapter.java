@@ -41,8 +41,6 @@ public class InventoryCursorAdapter extends CursorAdapter {
         String InventoryName = cursor.getString(nameColumnIndex);
         String InventoryPrice = cursor.getString(priceColumnIndex);
         final String InventoryQuantity = cursor.getString(quantityColumnIndex);
-        final String productID = cursor.getString(nameColumnIndex);
-
         if (TextUtils.isEmpty(InventoryPrice)) {
 
             InventoryPrice = context.getString(R.string.unknown_price);

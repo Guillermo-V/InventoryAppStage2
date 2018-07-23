@@ -74,7 +74,7 @@ public class EditorActivity extends AppCompatActivity implements
             invalidateOptionsMenu();
 
         } else {
-            setTitle(getString(R.string.editor_activity_title_edit_inventory));
+            setTitle("Edit");
             getLoaderManager().initLoader(EXISTING_Inventory_LOADER, null, this);
         }
 

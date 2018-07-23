@@ -55,7 +55,6 @@ public class NewActivity extends AppCompatActivity implements
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
 
-
         public boolean onTouch(View view, MotionEvent motionEvent) {
             mInventoryHasChanged = true;
             return false;
@@ -70,11 +69,11 @@ public class NewActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         mCurrentInventoryUri = intent.getData();
         if (mCurrentInventoryUri == null) {
-            setTitle("Add something to the inventory");
+            setTitle("Edit");
             invalidateOptionsMenu();
 
         } else {
-            setTitle(getString(R.string.editor_activity_title_edit_inventory));
+            setTitle("Edit");
             getLoaderManager().initLoader(EXISTING_Inventory_LOADER, null, this);
         }
 
