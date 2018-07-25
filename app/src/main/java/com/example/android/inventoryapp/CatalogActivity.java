@@ -1,7 +1,5 @@
 package com.example.android.inventoryapp;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -10,7 +8,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,10 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.InventoryContract;
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
@@ -43,7 +37,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CatalogActivity.this, NewActivity.class);
+                Intent intent = new Intent(CatalogActivity.this, CreateNewProductActivity.class);
                 startActivity(intent);
             }
         });
@@ -60,7 +54,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                Intent intent = new Intent(CatalogActivity.this, SeeProductDetailsActivity.class);
 
                 currentInventoryUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
 

@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditorActivity"
+            android:name=".SeeProductDetailsActivity"
             android:parentActivityName=".CatalogActivity"
             android:theme="@style/EditorTheme">
             <meta-data
@@ -26,7 +26,7 @@
                 android:value=".CatalogActivity" />
         </activity>
         <activity
-            android:name=".NewActivity"
+            android:name=".CreateNewProductActivity"
             android:parentActivityName=".CatalogActivity"
             android:theme="@style/EditorTheme">
             <meta-data
