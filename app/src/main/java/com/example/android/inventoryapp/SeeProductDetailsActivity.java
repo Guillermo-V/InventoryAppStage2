@@ -45,6 +45,8 @@ public class SeeProductDetailsActivity extends AppCompatActivity implements
 
     private boolean mInventoryHasChanged = false;
 
+    int idColumnIndex;
+
     int quantity;
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -309,7 +311,7 @@ public class SeeProductDetailsActivity extends AppCompatActivity implements
         }
 
         if (cursor.moveToFirst()) {
-            final int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
+            idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
             int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_Inventory_NAME);
             int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_Price);
             int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_Quantity);
