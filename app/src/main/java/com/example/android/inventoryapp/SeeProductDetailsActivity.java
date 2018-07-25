@@ -332,7 +332,7 @@ public class SeeProductDetailsActivity extends AppCompatActivity implements
                 @Override
                 public void onClick(View v) {
                     decreaseCount(idColumnIndex, quantity);
-                    quantity = quantity -1;
+                    quantity = quantity - 1;
                 }
             });
 
@@ -341,7 +341,7 @@ public class SeeProductDetailsActivity extends AppCompatActivity implements
                 @Override
                 public void onClick(View v) {
                     increaseCount(idColumnIndex, quantity);
-                    quantity = quantity +1;
+                    quantity = quantity + 1;
                 }
             });
 
@@ -382,7 +382,7 @@ public class SeeProductDetailsActivity extends AppCompatActivity implements
         quantityText.setText(String.valueOf(productQuantity));
 
     }
-    
+
     public void decreaseCount(int inventoryID, int inventoryQuantity) {
         inventoryQuantity = inventoryQuantity - 1;
         if (inventoryQuantity >= 0) {
