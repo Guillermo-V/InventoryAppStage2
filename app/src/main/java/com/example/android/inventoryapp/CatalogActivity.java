@@ -52,28 +52,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         inventoryListView.setAdapter(mCursorAdapter);
 
-        inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Intent intent = new Intent(CatalogActivity.this, SeeProductDetailsActivity.class);
-
-                currentInventoryUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
-
-                intent.setData(currentInventoryUri);
-
-                startActivity(intent);
-            }
-        });
-
-        /**Button saleButton = (Button) findViewById(R.id.sale);
-        saleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });**/
-
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
 
     }
