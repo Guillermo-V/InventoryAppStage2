@@ -149,7 +149,7 @@ public class CreateNewProductActivity extends AppCompatActivity implements
 
             }
         }
-
+        finish();
     }
 
     @Override
@@ -168,7 +168,6 @@ public class CreateNewProductActivity extends AppCompatActivity implements
 
                 saveInventory();
 
-                finish();
                 return true;
 
             case R.id.action_delete:

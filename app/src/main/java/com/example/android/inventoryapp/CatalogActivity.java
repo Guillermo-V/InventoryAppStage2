@@ -15,8 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -117,6 +115,22 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     public void onLoaderReset(Loader<Cursor> loader) {
         mCursorAdapter.swapCursor(null);
 
+    }
+
+
+    public void sellProduct(int inventoryID, int inventoryQuantity) {
+        inventoryQuantity = inventoryQuantity - 1;
+        if (inventoryQuantity >= 0) {
+            ContentValues values = new ContentValues();
+            values.put(InventoryEntry.COLUMN_Inventory_Quantity, inventoryQuantity);
+            Uri updateUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, inventoryID);
+            int rowsAffected = getContentResolver().update(updateUri, values, null, null);
+            Toast.makeText(this, "You just sold 1 product", Toast.LENGTH_SHORT).show();
+
+            Log.d("Log msg", "rowsAffected " + rowsAffected + " - inventoryID " + inventoryID + " - quantity " + inventoryQuantity);
+        } else {
+            Toast.makeText(this, "We do not have this product", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

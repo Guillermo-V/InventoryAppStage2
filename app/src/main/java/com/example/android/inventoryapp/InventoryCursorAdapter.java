@@ -14,7 +14,6 @@ import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.InventoryContract;
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
@@ -29,7 +28,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
     TextView quantityTextView;
 
     public InventoryCursorAdapter(Context context, Cursor c) {
-        super(context, c, 0 /* flags */);
+        super(context, c, 0);
     }
 
 
@@ -57,6 +56,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         String InventoryPrice = cursor.getString(priceColumnIndex);
         final String InventoryQuantity = cursor.getString(quantityColumnIndex);
         quantity = cursor.getInt(quantityColumnIndex);
+        final String InventoryID = cursor.getString(idColumnIndex);
         if (TextUtils.isEmpty(InventoryPrice)) {
 
             InventoryPrice = context.getString(R.string.unknown_price);
@@ -67,15 +67,10 @@ public class InventoryCursorAdapter extends CursorAdapter {
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                decreaseCount(idColumnIndex, quantity);
-                quantity = quantity - 1;
-                idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
-
+                CatalogActivity catalogActivity = (CatalogActivity) context;
+                catalogActivity.sellProduct(Integer.valueOf(InventoryID), Integer.valueOf(InventoryQuantity));
 
                 Log.v(TAG, "Item with id: " + id + " has been clicked");
-
-
             }
         });
 
@@ -103,6 +98,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
     private void updateInventory(int productQuantity, String text) {
         Log.d("message", "updateProduct at ViewActivity");
+
 
         quantityTextView.setText(String.valueOf(productQuantity) + "" + " available units");
 

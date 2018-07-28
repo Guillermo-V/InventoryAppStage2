@@ -106,52 +106,52 @@ public class SeeProductDetailsActivity extends AppCompatActivity implements
         String supplierName = mSupplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
 
-        if (mCurrentInventoryUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhoneNumber)) {
+        if ((mCurrentInventoryUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhoneNumber)) | (mCurrentInventoryUri == null | TextUtils.isEmpty(nameString) | TextUtils.isEmpty(priceString) | TextUtils.isEmpty(quantityString) | TextUtils.isEmpty(supplierName) | TextUtils.isEmpty(supplierPhoneNumber))) {
             Toast.makeText(this, "Error updating a product.Please type something in every field",
                     Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (mCurrentInventoryUri == null | TextUtils.isEmpty(nameString) | TextUtils.isEmpty(priceString) | TextUtils.isEmpty(quantityString) | TextUtils.isEmpty(supplierName) | TextUtils.isEmpty(supplierPhoneNumber)) {
-            Toast.makeText(this, "Error updating a product.Please type something in every field",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        ContentValues values = new ContentValues();
-        values.put(InventoryEntry.COLUMN_Inventory_NAME, nameString);
-        values.put(InventoryEntry.COLUMN_Inventory_Price, priceString);
-        values.put(InventoryEntry.COLUMN_Inventory_Quantity, quantityString);
-        values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, supplierName);
-        values.put(InventoryEntry.COLUMN_SUPPLIER_NPHONE_NUMBER, supplierPhoneNumber);
+        } else {
+            ContentValues values = new ContentValues();
+            values.put(InventoryEntry.COLUMN_Inventory_NAME, nameString);
+            values.put(InventoryEntry.COLUMN_Inventory_Price, priceString);
+            values.put(InventoryEntry.COLUMN_Inventory_Quantity, quantityString);
+            values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, supplierName);
+            values.put(InventoryEntry.COLUMN_SUPPLIER_NPHONE_NUMBER, supplierPhoneNumber);
 
 
-        if (mCurrentInventoryUri == null) {
-            Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, values);
+            if (mCurrentInventoryUri == null) {
+                Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, values);
 
-            if (newUri == null) {
-                Toast.makeText(this, getString(R.string.editor_insert_inventory_failed),
-                        Toast.LENGTH_SHORT).show();
+                if (newUri == null) {
+                    Toast.makeText(this, getString(R.string.editor_insert_inventory_failed),
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(this, getString(R.string.editor_insert_inventory_successful),
+                            Toast.LENGTH_SHORT).show();
+
+                }
             } else {
                 Toast.makeText(this, getString(R.string.editor_insert_inventory_successful),
                         Toast.LENGTH_SHORT).show();
 
+                int rowsAffected = getContentResolver().update(mCurrentInventoryUri, values, null, null);
+
+                if (rowsAffected == 0) {
+                    Toast.makeText(this, getString(R.string.editor_update_inventory_failed),
+                            Toast.LENGTH_SHORT).show();
+
+
+                } else {
+                    Toast.makeText(this, getString(R.string.editor_update_inventory_successful),
+                            Toast.LENGTH_SHORT).show();
+
+                }
             }
-        } else {
-            Toast.makeText(this, getString(R.string.editor_insert_inventory_successful),
-                    Toast.LENGTH_SHORT).show();
-
-            int rowsAffected = getContentResolver().update(mCurrentInventoryUri, values, null, null);
-
-            if (rowsAffected == 0) {
-                Toast.makeText(this, getString(R.string.editor_update_inventory_failed),
-                        Toast.LENGTH_SHORT).show();
-
-            } else {
-                Toast.makeText(this, getString(R.string.editor_update_inventory_successful),
-                        Toast.LENGTH_SHORT).show();
-
-            }
+            finish();
         }
+
+
     }
 
     @Override
@@ -170,7 +170,7 @@ public class SeeProductDetailsActivity extends AppCompatActivity implements
 
                 saveInventory();
 
-                finish();
+
                 return true;
 
             case R.id.action_delete:
