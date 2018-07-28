@@ -100,6 +100,7 @@ public class CreateNewProductActivity extends AppCompatActivity implements
         String supplierName = mSupplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
 
+
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_Inventory_NAME, nameString);
         values.put(InventoryEntry.COLUMN_Inventory_Price, priceString);
@@ -107,6 +108,18 @@ public class CreateNewProductActivity extends AppCompatActivity implements
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, supplierName);
         values.put(InventoryEntry.COLUMN_SUPPLIER_NPHONE_NUMBER, supplierPhoneNumber);
 
+
+        if (TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhoneNumber)) {
+            Toast.makeText(this, "Error saving a product.Please type something in every field",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(nameString) | TextUtils.isEmpty(priceString) | TextUtils.isEmpty(quantityString) | TextUtils.isEmpty(supplierName) | TextUtils.isEmpty(supplierPhoneNumber)) {
+            Toast.makeText(this, "Error saving a product.Please type something in every field",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
 
         if (mCurrentInventoryUri == null) {
@@ -137,16 +150,6 @@ public class CreateNewProductActivity extends AppCompatActivity implements
             }
         }
 
-        if (mCurrentInventoryUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhoneNumber)) {
-            Toast.makeText(this, "Error updating a product.Please type something in every field",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (mCurrentInventoryUri == null | TextUtils.isEmpty(nameString) | TextUtils.isEmpty(priceString) | TextUtils.isEmpty(quantityString) | TextUtils.isEmpty(supplierName) | TextUtils.isEmpty(supplierPhoneNumber)) {
-            Toast.makeText(this, "Error updating a product.Please type something in every field",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
     }
 
     @Override
@@ -265,7 +268,6 @@ public class CreateNewProductActivity extends AppCompatActivity implements
         }
 
         if (cursor.moveToFirst()) {
-            final int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
             int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_Inventory_NAME);
             int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_Price);
             int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_Inventory_Quantity);

@@ -106,7 +106,7 @@ public class InventoryProvider extends ContentProvider {
         }
     }
 
-     final int updateInventory(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    final int updateInventory(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
 
         if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_Inventory_NAME)) {

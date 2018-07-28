@@ -56,5 +56,6 @@
     <string name="empty_view_subtitle_text">Lets add something!</string>
 
     <string name="editor_update_inventory_successful">Inventory updated</string>
+    <string name="available_units">available units</string>
 
 </resources>
